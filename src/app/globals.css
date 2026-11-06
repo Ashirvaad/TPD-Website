@@ -1,0 +1,445 @@
+@import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+/* ==========================================================================
+   Design tokens — edit here to re-theme the whole site.
+   ========================================================================== */
+:root {
+  /* Colour */
+  --bg: #0b0b0d;
+  --bg-2: #141418;
+  --surface: #1b1b20;
+  --fg: #f5f3ef;
+  --muted: #a5a3a5;
+  --subtle: #6f6d72;
+  --accent: #65449b;
+  --accent-ink: #f5f3ef;
+  --brand: #6a46a3; /* logo purple */
+  --brand-glow: #8b5cf6;
+  --line: rgba(255, 255, 255, 0.14);
+  --line-soft: rgba(255, 255, 255, 0.07);
+  --danger: #ff8a7a;
+
+  /* Typography */
+  --font-display: var(--font-instrument), "Times New Roman", serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+  --text-display-xl: clamp(3rem, 1.2rem + 7.6vw, 9.5rem);
+  --text-display-l: clamp(2.5rem, 1.4rem + 4.6vw, 6rem);
+  --text-display-m: clamp(2rem, 1.3rem + 2.8vw, 4rem);
+  --text-display-s: clamp(1.6rem, 1.2rem + 1.4vw, 2.5rem);
+  --text-lead: clamp(1.05rem, 0.98rem + 0.35vw, 1.3rem);
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --text-label: 0.72rem;
+
+  /* Spacing & layout */
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.75rem);
+  --section: clamp(5rem, 3rem + 8vw, 11rem);
+  --content-max: 90rem;
+  --prose-max: 40rem;
+  --nav-h: 4.75rem;
+
+  /* Z-index layers */
+  --z-base: 1;
+  --z-raised: 10;
+  --z-nav: 50;
+  --z-chat: 60;
+  --z-menu: 70;
+  --z-modal: 80;
+  --z-transition: 100;
+
+  /* Motion */
+  --dur-fast: 180ms;
+  --dur: 400ms;
+  --dur-slow: 900ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-surface: var(--surface);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-brand: var(--brand);
+  --color-brand-glow: var(--brand-glow);
+  --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
+  --color-danger: var(--danger);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-body);
+  --breakpoint-xs: 30rem;
+  --ease-out-expo: var(--ease-out);
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+@layer base {
+  html {
+    background: var(--bg);
+    color: var(--fg);
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: calc(var(--nav-h) + 1rem);
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+  html.scroll-locked,
+  html.scroll-locked body {
+    overflow: hidden;
+  }
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 0.98;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  img,
+  video {
+    max-width: 100%;
+  }
+}
+
+/* ==========================================================================
+   Components & utilities
+   ========================================================================== */
+@layer components {
+  .container-x {
+    width: 100%;
+    max-width: var(--content-max);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+  .section-y {
+    padding-block: var(--section);
+  }
+  .display-xl {
+    font-family: var(--font-display);
+    font-size: var(--text-display-xl);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+  }
+  .display-l {
+    font-family: var(--font-display);
+    font-size: var(--text-display-l);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+  }
+  .display-m {
+    font-family: var(--font-display);
+    font-size: var(--text-display-m);
+    line-height: 1;
+    letter-spacing: -0.025em;
+  }
+  .display-s {
+    font-family: var(--font-display);
+    font-size: var(--text-display-s);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .lead {
+    font-size: var(--text-lead);
+    line-height: 1.55;
+    color: var(--muted);
+  }
+  .eyebrow {
+    font-family: var(--font-body);
+    line-height: 1.4;
+    font-size: var(--text-label);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .accent-italic {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  /* Buttons */
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3rem;
+    padding: 0 1.5rem;
+    border-radius: 999px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    isolation: isolate;
+    transition:
+      color var(--dur) var(--ease-out),
+      background-color var(--dur) var(--ease-out),
+      border-color var(--dur) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
+  }
+  .btn:active {
+    transform: scale(0.97);
+  }
+  .btn svg {
+    transition: transform var(--dur) var(--ease-out);
+  }
+  .btn:hover svg {
+    transform: translateX(3px);
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  .btn-primary::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--fg);
+    transform: translateY(101%);
+    border-radius: inherit;
+    transition: transform var(--dur) var(--ease-out);
+  }
+  .btn-primary:hover::before {
+    transform: translateY(0);
+  }
+  .btn-primary:hover {
+    color: var(--bg);
+  }
+  .btn-ghost {
+    border: 1px solid var(--line);
+    color: var(--fg);
+  }
+  .btn-ghost:hover {
+    border-color: var(--fg);
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .btn-sm {
+    min-height: 2.5rem;
+    padding: 0 1.1rem;
+    font-size: 0.85rem;
+  }
+
+  .link-underline {
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0% 1px no-repeat;
+    transition: background-size var(--dur) var(--ease-out);
+  }
+  .link-underline:hover,
+  .link-underline:focus-visible {
+    background-size: 100% 1px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0 1.1rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    transition: all var(--dur) var(--ease-out);
+  }
+  .chip:hover {
+    color: var(--fg);
+    border-color: rgba(255, 255, 255, 0.35);
+  }
+  .chip[aria-pressed="true"],
+  .chip[aria-selected="true"] {
+    background: var(--fg);
+    border-color: var(--fg);
+    color: var(--bg);
+  }
+
+  .hairline {
+    border-color: var(--line);
+  }
+
+  /* Boxed form fields (contact form) */
+  .form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--fg);
+  }
+  .form-hint {
+    font-weight: 400;
+    color: var(--subtle);
+  }
+  .input {
+    width: 100%;
+    min-height: 3.1rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--fg);
+    font-size: 1rem;
+    transition:
+      border-color var(--dur) var(--ease-out),
+      box-shadow var(--dur) var(--ease-out),
+      background-color var(--dur) var(--ease-out);
+  }
+  .input::placeholder {
+    color: var(--subtle);
+  }
+  .input:hover {
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+  .input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 0 3px rgba(101, 68, 155, 0.35);
+  }
+  .input[aria-invalid="true"] {
+    border-color: var(--danger);
+  }
+
+  /* Form fields */
+  .field {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 0.85rem 0;
+    color: var(--fg);
+    font-size: 1rem;
+    transition: border-color var(--dur) var(--ease-out);
+  }
+  .field::placeholder {
+    color: var(--subtle);
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .field[aria-invalid="true"] {
+    border-color: var(--danger);
+  }
+
+  /* Media frames */
+  .media-frame {
+    position: relative;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .media-frame > :is(img, video, svg) {
+    transition: transform 1.2s var(--ease-out);
+  }
+  .group:hover .media-frame > :is(img, video, svg) {
+    transform: scale(1.04);
+  }
+}
+
+@media (hover: none) {
+  .group:hover .media-frame > :is(img, video, svg) {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Marquee for the client strip */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee 40s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+/* Landing film: opens on the video and navbar only. Text and chat are
+   revealed by the hero timeline (see CinematicHero). */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-reveal {
+    opacity: 0;
+    visibility: hidden;
+  }
+  body:has(.hero[data-hero-state="intro"]) [data-chat] {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+header,
+[data-chat] {
+  transition:
+    opacity 0.6s var(--ease-out),
+    visibility 0.6s,
+    background-color 0.5s,
+    border-color 0.5s;
+}
+
+/* Error-page mascot */
+@keyframes mascotFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+@keyframes mascotShadow {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scaleX(0.82);
+    opacity: 0.45;
+  }
+}
